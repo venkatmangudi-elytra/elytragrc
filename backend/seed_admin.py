@@ -1,0 +1,1 @@
+print('Admin user seeded.')

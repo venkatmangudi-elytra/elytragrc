@@ -1,0 +1,12 @@
+[Unit]
+Description=CSCRF GRC Platform
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/docker compose -f /opt/cscrf-grc/docker-compose.yml up
+WorkingDirectory=/opt/cscrf-grc
+Restart=always
+User=cscrfgrc
+
+[Install]
+WantedBy=multi-user.target
