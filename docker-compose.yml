@@ -1,28 +1,47 @@
-version: '3.8'
 services:
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cscrf-grc-backend
     ports:
       - "8000:8000"
-    env_file:
-      - .env
     volumes:
-      - ./uploads:/app/uploads
+      - ./backend:/app
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/cscrf
+      - REDIS_URL=redis://redis:6379
     depends_on:
       - db
       - redis
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cscrf-grc-frontend
     ports:
-      - "3000:80"
+      - "3000:3000"
+    depends_on:
+      - backend
 
   db:
     image: postgres:14
+    container_name: cscrf-grc-db
     environment:
-      POSTGRES_USER: cscrf
-      POSTGRES_PASSWORD: changeMe!
-      POSTGRES_DB: cscrf_db
+      POSTGRES_DB: cscrf
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   redis:
     image: redis:alpine
+    container_name: cscrf-grc-redis
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
