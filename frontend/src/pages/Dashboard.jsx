@@ -1,3 +1,7 @@
-export default function Dashboard() {
-  return <div>Welcome to CSCRF GRC Dashboard</div>;
-}
+import React from 'react';
+
+const Dashboard = () => {
+  return <div className="p-4 text-xl">Dashboard Page</div>;
+};
+
+export default Dashboard;
